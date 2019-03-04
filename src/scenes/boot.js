@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import battleScene from './battle'
 
 export default class BootScene extends Phaser.Scene {
 
@@ -36,7 +37,11 @@ export default class BootScene extends Phaser.Scene {
     this.input.on(
       "pointerdown",
       function() {
-        this.scene.start("play");
+        const data = {
+          player: 'Evan',
+          enemy: 'Adam'
+        }
+        this.scene.start("battle", data);
       },
       this
     );

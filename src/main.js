@@ -2,6 +2,7 @@
 import Phaser from 'phaser'
 
 import bootScene from './scenes/boot'
+import battleScene from './scenes/battle'
 
 function newGame () {
   if (game) return;
@@ -13,7 +14,7 @@ function newGame () {
     pixelArt: true,
     title: 'Phaser 3 with Parcel 📦',
     url: 'https://github.com/samme/phaser-parcel',
-    scene: [bootScene]
+    scene: [bootScene, battleScene]
   });
 }
 

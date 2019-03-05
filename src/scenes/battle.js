@@ -20,8 +20,10 @@ export default class BootScene extends Phaser.Scene {
       fontSize: 35
     }
 
-    this.add.text(400, 50, "Battle", textStyle)
-      .setOrigin(0.5, 0);
+    this.add.text(400, 50, "Battle", {
+      ...textStyle,
+      fill: 'white'
+    }).setOrigin(0.5, 0);
 
     this.add.text(200, 200, this.player, {
       ...textStyle,

@@ -12,6 +12,12 @@ function newGame () {
     width: 800,
     height: 600,
     pixelArt: true,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 }
+        }
+    },
     title: 'Phaser 3 with Parcel 📦',
     url: 'https://github.com/samme/phaser-parcel',
     scene: [bootScene, battleScene]

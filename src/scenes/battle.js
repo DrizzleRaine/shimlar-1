@@ -36,6 +36,10 @@ export default class BootScene extends Phaser.Scene {
     this.add.triangle(630, 300,
       0, 0, -30, 50, 30, 50,
     0xff0000)
+
+    this.input.on("pointerdown", () => {
+      this.scene.start("boot");
+    });
   }
   //
   // update(time, delta) {

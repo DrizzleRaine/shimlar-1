@@ -1,18 +1,21 @@
-import Phaser from 'phaser'
+import * as Phaser from 'phaser'
 import MAP from '../../maps/fantasy.csv'
 import TILES from '../../maps/assets/rts.png'
 // import PLAYER from '../../maps/assets/player?.png'
 
 export default class BootScene extends Phaser.Scene {
 
+  private x: integer = 700;
+  private y: integer = 700;
+  private map: Phaser.Tilemaps.Tilemap;
+  private tileset: Phaser.Tilemaps.Tileset;
+  private player: Phaser.GameObjects.GameObject;
+  private keys: Phaser.Input.Keyboard.CursorKeys;
+
   constructor() {
     super({
       key: 'boot'
     })
-    this.x = 700
-    this.y = 700
-    this.vx = 0
-    this.vy = 0
   }
 
   preload() {
@@ -59,9 +62,7 @@ export default class BootScene extends Phaser.Scene {
     );
   }
 
-  update(time, delta) {
-    const ratio = delta / 1000.0
-    // this.player.body.setDrag(150,150);
+  update() {
     this.player.body.setVelocity(0);
     if(this.keys.left.isDown) {
       this.player.body.setVelocityX(-150)

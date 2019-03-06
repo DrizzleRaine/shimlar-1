@@ -1,5 +1,6 @@
-
-import Phaser from 'phaser'
+/// <reference path="../@types/phaser.d.ts"/>
+/// <reference path="../@types/shimlar.d.ts"/>
+import * as Phaser from 'phaser'
 
 import bootScene from './scenes/boot'
 import battleScene from './scenes/battle'
@@ -8,10 +9,14 @@ function newGame () {
   if (game) return;
   game = new Phaser.Game({
     // type: Phaser.AUTO,
-    fpsTarget: 60,
+    fps: {
+      target: 30
+    },
     width: 800,
     height: 600,
-    pixelArt: true,
+    render: {
+      pixelArt: true,
+    },
     physics: {
         default: 'arcade',
         arcade: {
@@ -27,11 +32,10 @@ function newGame () {
 function destroyGame () {
   if (!game) return;
   game.destroy(true);
-  game.runDestroy();
   game = null;
 }
 
-let game;
+let game: Phaser.Game;
 
 if (module.hot) {
   module.hot.dispose(destroyGame);

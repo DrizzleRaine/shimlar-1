@@ -30,6 +30,7 @@ function newGame () {
 function destroyGame () {
   if (!game) return;
   game.destroy(true);
+  game.runDestroy(); // shouldn't need to be called, but does?
   game = null;
 }
 

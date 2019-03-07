@@ -49,17 +49,13 @@ export default class BootScene extends Phaser.Scene {
     }).setOrigin(0, 0)
     .setScrollFactor(0); // fix it to the top
 
-    this.input.on(
-      "pointerdown",
-      function() {
-        const data = {
-          player: { name: 'Evan', hp: 50 },
-          enemy: { name: 'Adam', hp: 10 }
-        };
-        this.scene.start("battle", data);
-      },
-      this
-    );
+    this.input.on("pointerdown", () => {
+      const data = {
+        player: { name: 'Evan', hp: 50 },
+        enemy: { name: 'Adam', hp: 10 }
+      };
+      this.scene.start("battle", data);
+    });
   }
 
   update() {

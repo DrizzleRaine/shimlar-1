@@ -18,6 +18,7 @@ export default class BootScene extends Phaser.Scene {
   private menuItems: Array<Phaser.GameObjects.Text>;
 
   private keys: ShimlarKeys;
+  private enemyText: Phaser.GameObjects.Text;
 
   constructor() {
     super({
@@ -75,13 +76,13 @@ export default class BootScene extends Phaser.Scene {
       fill: 'white'
     }).setOrigin(0.5, 0);
 
-    this.add.text(200, 200, this.player.name, {
+    this.add.text(200, 200, this.player.name + " (" + this.player.hp + ")", {
       ...textStyle,
       fill: 'green'
     }).setOrigin(0.5, 0);
     this.add.rectangle(200, 300, 50, 50, 0x00ff00)
 
-    this.add.text(600, 200, this.enemy.name, textStyle)
+    this.enemyText = this.add.text(600, 200, this.getEnemyText(), textStyle)
       .setOrigin(0.5, 0);
     this.add.triangle(630, 300,
       0, 0, -30, 50, 30, 50,
@@ -107,9 +108,20 @@ export default class BootScene extends Phaser.Scene {
       console.log(menuItemText);
       if (menuItemText === "Run") {
         this.scene.start("boot");
+      } else if (menuItemText === "Attack") {
+        this.enemy.hp -= 3;
+        if (this.enemy.hp <= 0) {
+          // Enemy dead! Do dead enemy things!...For now go to boot screen.
+          this.scene.start("boot");
+        } else {
+          this.enemyText.setText(this.getEnemyText())
+        }
       }
     }
 
   }
 
+  private getEnemyText(): string {
+    return this.enemy.name + " (" + this.enemy.hp + ")";
+  }
 }

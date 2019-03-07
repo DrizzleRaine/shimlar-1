@@ -1,6 +1,17 @@
-import Phaser from 'phaser'
+import * as Phaser from 'phaser'
 
 export default class BootScene extends Phaser.Scene {
+
+  private player: string;
+  private enemy: string;
+  private currentlySelectedMenuItem: number;
+
+  private menuAttack: Phaser.GameObjects.Text;
+  private menuDefend: Phaser.GameObjects.Text;
+  private menuRun: Phaser.GameObjects.Text;
+  private menuItems: Array<Phaser.GameObjects.Text>;
+
+  private keys: ShimlarKeys;
 
   constructor() {
     super({
@@ -14,7 +25,7 @@ export default class BootScene extends Phaser.Scene {
     this.currentlySelectedMenuItem = 0;
   }
 
-  selectMenuItem(itemSelected) {
+  selectMenuItem(itemSelected: number) {
     if (itemSelected >= this.menuItems.length) {
       itemSelected = 0;
     } else if (itemSelected < 0) {
@@ -58,7 +69,7 @@ export default class BootScene extends Phaser.Scene {
       fill: 'white'
     }).setOrigin(0.5, 0);
 
-    this.playerText = this.add.text(200, 200, this.player, {
+    this.add.text(200, 200, this.player, {
       ...textStyle,
       fill: 'green'
     }).setOrigin(0.5, 0);
@@ -70,21 +81,21 @@ export default class BootScene extends Phaser.Scene {
       0, 0, -30, 50, 30, 50,
       0xff0000)
 
-    this.key_up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-    this.key_w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.key_down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-    this.key_s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    this.key_enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    this.keys.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+    this.keys.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.keys.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+    this.keys.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.keys.enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
   }
 
-  update(time, delta) {
-    if (Phaser.Input.Keyboard.JustDown(this.key_up) || Phaser.Input.Keyboard.JustDown(this.key_w)) {
+  update() {
+    if (Phaser.Input.Keyboard.JustDown(this.keys.up) || Phaser.Input.Keyboard.JustDown(this.keys.w)) {
       this.selectMenuItem(this.currentlySelectedMenuItem - 1);
     }
-    if (Phaser.Input.Keyboard.JustDown(this.key_down) || Phaser.Input.Keyboard.JustDown(this.key_s)) {
+    if (Phaser.Input.Keyboard.JustDown(this.keys.down) || Phaser.Input.Keyboard.JustDown(this.keys.s)) {
       this.selectMenuItem(this.currentlySelectedMenuItem + 1);
     }
-    if (Phaser.Input.Keyboard.JustDown(this.key_enter)) {
+    if (Phaser.Input.Keyboard.JustDown(this.keys.enter)) {
       const menuItemText = this.menuItems[this.currentlySelectedMenuItem].text;
       console.log(menuItemText);
       if (menuItemText === "Run") {

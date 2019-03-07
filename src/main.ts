@@ -1,5 +1,3 @@
-/// <reference path="../@types/phaser.d.ts"/>
-/// <reference path="../@types/shimlar.d.ts"/>
 import * as Phaser from 'phaser'
 
 import bootScene from './scenes/boot'

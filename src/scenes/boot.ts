@@ -54,7 +54,8 @@ export default class BootScene extends Phaser.Scene {
         player: { name: 'Evan', hp: 50 },
         enemy: { name: 'Adam', hp: 10 }
       };
-      this.scene.start("battle", data);
+      this.scene.launch("battle", data);
+      this.scene.pause();
     });
   }
 

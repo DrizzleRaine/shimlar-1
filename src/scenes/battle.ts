@@ -50,6 +50,9 @@ export default class BootScene extends Phaser.Scene {
       fontSize: 35
     };
 
+    this.add.rectangle(0,0, 800, 600, 0x1a1a1a)
+    .setOrigin(0,0)
+
     this.menuAttack = this.add.text(400, 350, "Attack", {
       ...textStyle,
       fill: 'grey',
@@ -107,18 +110,23 @@ export default class BootScene extends Phaser.Scene {
       const menuItemText = this.menuItems[this.currentlySelectedMenuItem].text;
       console.log(menuItemText);
       if (menuItemText === "Run") {
-        this.scene.start("boot");
+        this.switchToMainScene()
       } else if (menuItemText === "Attack") {
         this.enemy.hp -= 3;
         if (this.enemy.hp <= 0) {
           // Enemy dead! Do dead enemy things!...For now go to boot screen.
-          this.scene.start("boot");
+          this.switchToMainScene()
         } else {
           this.enemyText.setText(this.getEnemyText())
         }
       }
     }
 
+  }
+
+  private switchToMainScene() {
+    this.scene.resume("boot");
+    this.scene.stop();
   }
 
   private getEnemyText(): string {

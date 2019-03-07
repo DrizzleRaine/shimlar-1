@@ -53,9 +53,9 @@ export default class BootScene extends Phaser.Scene {
       "pointerdown",
       function() {
         const data = {
-          player: 'Evan',
-          enemy: 'Adam'
-        }
+          player: { name: 'Evan', hp: 50 },
+          enemy: { name: 'Adam', hp: 10 }
+        };
         this.scene.start("battle", data);
       },
       this

@@ -1,9 +1,14 @@
 import * as Phaser from 'phaser'
 
+interface BattleEntity {
+  name: string;
+  hp: integer;
+}
+
 export default class BootScene extends Phaser.Scene {
 
-  private player: string;
-  private enemy: string;
+  private player: BattleEntity;
+  private enemy: BattleEntity;
   private currentlySelectedMenuItem: number;
 
   private menuAttack: Phaser.GameObjects.Text;
@@ -20,8 +25,8 @@ export default class BootScene extends Phaser.Scene {
   }
 
   init({ player, enemy }) {
-    this.player = player || 'N/A';
-    this.enemy = enemy || 'enemy';
+    this.player = player || { name: 'N/A', hp: 5 };
+    this.enemy = enemy || { name: 'enemy', hp: 5 };
     this.currentlySelectedMenuItem = 0;
   }
 
@@ -69,18 +74,19 @@ export default class BootScene extends Phaser.Scene {
       fill: 'white'
     }).setOrigin(0.5, 0);
 
-    this.add.text(200, 200, this.player, {
+    this.add.text(200, 200, this.player.name, {
       ...textStyle,
       fill: 'green'
     }).setOrigin(0.5, 0);
     this.add.rectangle(200, 300, 50, 50, 0x00ff00)
 
-    this.add.text(600, 200, this.enemy, textStyle)
+    this.add.text(600, 200, this.enemy.name, textStyle)
       .setOrigin(0.5, 0);
     this.add.triangle(630, 300,
       0, 0, -30, 50, 30, 50,
       0xff0000)
 
+    this.keys = new ShimlarKeys;
     this.keys.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     this.keys.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.keys.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);

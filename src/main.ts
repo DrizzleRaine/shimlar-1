@@ -10,8 +10,10 @@ function newGame () {
     fps: {
       target: 30
     },
-    width: 800,
-    height: 600,
+    scale: {
+      mode: Phaser.Scale.FIT,
+      autoCenter: Phaser.Scale.CENTER_BOTH
+    },
     render: {
       pixelArt: true,
     },

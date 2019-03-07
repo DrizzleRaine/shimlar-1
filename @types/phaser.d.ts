@@ -6578,6 +6578,12 @@ declare namespace Phaser {
          */
         destroy(removeCanvas: boolean, noReturn?: boolean): void;
 
+	/**
+	 * Internal function that removes the <canvas> element. Required to be called for proper hot-reload 
+	 * 	functionality.
+	 */
+	runDestroy(): void;
+
     }
 
     namespace Core {

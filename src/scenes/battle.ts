@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser'
+import { ShimlarKeys } from "../util/ShimlarKeys";
 
 interface BattleEntity {
   name: string;

@@ -28,10 +28,10 @@ export default class BootScene extends Phaser.Scene {
     console.log("running scene");
 
     // Create the specifications for our map that matched the Tiled settings.
-    this.map = this.make.tilemap({key:'map', tileWidth: 128, tileHeight: 128})
+    this.map = this.make.tilemap({key:'map', tileWidth: 126, tileHeight: 126})
     // Set the Ground layer in our map to the asset `tiles`, specifying the
     // size of  the tiles.
-    this.tileset = this.map.addTilesetImage('Ground', 'tiles', 128, 128, 64, 64)
+    this.tileset = this.map.addTilesetImage('Ground', 'tiles', 126, 126, 65, 66)
     // Render a single static texture from layer 0 aka Ground
     this.map.createStaticLayer(0, this.tileset, 0, 0);
 

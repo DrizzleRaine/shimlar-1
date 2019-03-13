@@ -51,7 +51,7 @@ export default class BootScene extends Phaser.Scene {
     };
 
     this.add.rectangle(0,0, 800, 600, 0x1a1a1a)
-    .setOrigin(0,0)
+    .setOrigin(0,0);
 
     this.menuAttack = this.add.text(400, 350, "Attack", {
       ...textStyle,
@@ -83,13 +83,13 @@ export default class BootScene extends Phaser.Scene {
       ...textStyle,
       fill: 'green'
     }).setOrigin(0.5, 0);
-    this.add.rectangle(200, 300, 50, 50, 0x00ff00)
+    this.add.rectangle(200, 300, 50, 50, 0x00ff00);
 
     this.enemyText = this.add.text(600, 200, this.getEnemyText(), textStyle)
       .setOrigin(0.5, 0);
     this.add.triangle(630, 300,
       0, 0, -30, 50, 30, 50,
-      0xff0000)
+      0xff0000);
 
     this.keys = new ShimlarKeys;
     this.keys.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);

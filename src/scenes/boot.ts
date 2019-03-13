@@ -2,6 +2,7 @@ import * as Phaser from 'phaser'
 import MAP from '../../maps/fantasy.csv'
 import TILES from '../../maps/assets/rts.png'
 // import PLAYER from '../../maps/assets/player?.png'
+import GameData from '../data/gameData';
 
 export default class BootScene extends Phaser.Scene {
 
@@ -13,6 +14,8 @@ export default class BootScene extends Phaser.Scene {
   private keys: Phaser.Input.Keyboard.CursorKeys;
   private battleKey: Phaser.Input.Keyboard.Key;
   private playerSpeed: integer = 300;
+  private gameData: GameData;
+  private playerGoldText: Phaser.GameObjects.Text;
 
   constructor() {
     super({
@@ -28,7 +31,7 @@ export default class BootScene extends Phaser.Scene {
 
   create() {
     console.log("running scene");
-    console.log(this.playerSpeed);
+    this.gameData = GameData.Instance();
 
     // Create the specifications for our map that matched the Tiled settings.
     this.map = this.make.tilemap({key:'map', tileWidth: 126, tileHeight: 126});
@@ -52,9 +55,16 @@ export default class BootScene extends Phaser.Scene {
       fill: 'white'
     }).setOrigin(0, 0)
     .setScrollFactor(0); // fix it to the top
+
+    this.playerGoldText = this.add.text(10, 10, "Gold: " + this.gameData.player.gold, {
+      fill: 'yellow'
+    }).setOrigin(0, -1)
+      .setScrollFactor(0, 0); // fix it to the top left
   }
 
   update() {
+    // Probably shouldn't do this every frame...:P
+    this.playerGoldText.setText("Gold: " + this.gameData.player.gold);
     if (Phaser.Input.Keyboard.JustDown(this.battleKey)) {
       const data = {
         player: { name: 'Evan', hp: 50 },

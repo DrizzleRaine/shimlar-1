@@ -7,8 +7,6 @@
         "**/*.spec.ts"
     ],
     "compilerOptions": {
-        "target": "es6",
-        "resolveJsonModule": true,
-        "esModuleInterop": true
+        "target": "es6"
     }
 }

@@ -6,7 +6,8 @@ import battleScene from './scenes/battle'
 function newGame () {
   if (game) return;
   game = new Phaser.Game({
-    // type: Phaser.AUTO,
+    width: 1280,
+    height: 720,
     fps: {
       target: 30
     },

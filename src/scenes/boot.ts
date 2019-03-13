@@ -76,7 +76,7 @@ export default class BootScene extends Phaser.Scene {
 
     this.player.body.setVelocity(0);
     if(this.keys.left.isDown) {
-      this.player.body.setVelocityX(-300)
+      this.player.body.setVelocityX(-this.playerSpeed)
     }
     if(this.keys.right.isDown) {
       this.player.body.setVelocityX(this.playerSpeed)

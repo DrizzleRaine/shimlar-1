@@ -54,7 +54,7 @@ export default class BootScene extends Phaser.Scene {
       fontSize: 35
     };
 
-    this.add.rectangle(0,0, 800, 600, 0x1a1a1a)
+    this.add.rectangle(0,0, +this.game.config.width, +this.game.config.height, 0x1a1a1a)
     .setOrigin(0,0);
 
     this.menuAttack = this.add.text(400, 350, "Attack", {

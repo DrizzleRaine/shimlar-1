@@ -1,25 +1,8 @@
-import defaultGameData from './sampleGameData.json';
 
-export default class GameData {
-  player: Player;
-
-  private static _instance: GameData;
-
-  private constructor() {
-    this.player = new Player();
-    Object.assign(this.player, defaultGameData.playerData)
-  }
-
-  public static Instance(): GameData {
-    if (!this._instance) {
-      this._instance = new GameData();
-    }
-    return this._instance;
-  }
+class PlayerData {
+  currentHp: integer = 60;
+  maxHp: integer = 60;
+  gold: integer = 42;
 }
 
-export class Player {
-  currentHp: integer;
-  maxHp: integer;
-  gold: integer;
-}
+export const Player = new PlayerData();

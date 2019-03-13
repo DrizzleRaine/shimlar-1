@@ -2,7 +2,8 @@ import * as Phaser from 'phaser'
 import MAP from '../../maps/fantasy.csv'
 import TILES from '../../maps/assets/rts.png'
 // import PLAYER from '../../maps/assets/player?.png'
-import GameData from '../data/gameData';
+import * as GameData from '../data/gameData';
+// could also be `import { Player } from '../data/gameData'`
 
 export default class BootScene extends Phaser.Scene {
 
@@ -14,8 +15,8 @@ export default class BootScene extends Phaser.Scene {
   private keys: Phaser.Input.Keyboard.CursorKeys;
   private battleKey: Phaser.Input.Keyboard.Key;
   private playerSpeed: integer = 300;
-  private gameData: GameData;
   private playerGoldText: Phaser.GameObjects.Text;
+  private playerLocationText: Phaser.GameObjects.Text;
 
   constructor() {
     super({
@@ -31,7 +32,6 @@ export default class BootScene extends Phaser.Scene {
 
   create() {
     console.log("running scene");
-    this.gameData = GameData.Instance();
 
     // Create the specifications for our map that matched the Tiled settings.
     this.map = this.make.tilemap({key:'map', tileWidth: 126, tileHeight: 126});
@@ -51,20 +51,25 @@ export default class BootScene extends Phaser.Scene {
     this.keys = this.input.keyboard.createCursorKeys();
     this.battleKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    this.add.text(10, 10, "Arrow keys for movement.", {
+    this.playerLocationText = this.add.text(10, 10, `X:${this.player.body.x} Y:${this.player.body.y}`, {
       fill: 'white'
     }).setOrigin(0, 0)
     .setScrollFactor(0); // fix it to the top
 
-    this.playerGoldText = this.add.text(10, 10, "Gold: " + this.gameData.player.gold, {
+    this.add.text(1189, 1400, `^ this is happening because the tiles aren't aligned in rts.png`)
+
+    this.playerGoldText = this.add.text(10, 10, "Gold: " + GameData.Player.gold, {
       fill: 'yellow'
     }).setOrigin(0, -1)
       .setScrollFactor(0, 0); // fix it to the top left
+
+    console.log('current GameData:', GameData)
   }
 
   update() {
     // Probably shouldn't do this every frame...:P
-    this.playerGoldText.setText("Gold: " + this.gameData.player.gold);
+    this.playerGoldText.setText("Gold: " + GameData.Player.gold);
+    this.playerLocationText.setText(`X:${this.player.body.x} Y:${this.player.body.y}`);
     if (Phaser.Input.Keyboard.JustDown(this.battleKey)) {
       const data = {
         player: { name: 'Evan', hp: 50 },

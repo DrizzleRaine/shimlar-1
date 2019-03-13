@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser'
 import { ShimlarKeys } from "../util/ShimlarKeys";
-import GameData from "../data/gameData";
+import * as GameData from "../data/gameData";
 
 interface BattleEntity {
   name: string;
@@ -20,7 +20,6 @@ export default class BootScene extends Phaser.Scene {
 
   private keys: ShimlarKeys;
   private enemyText: Phaser.GameObjects.Text;
-  private gameData: GameData;
 
   constructor() {
     super({
@@ -46,7 +45,6 @@ export default class BootScene extends Phaser.Scene {
   }
 
   create() {
-    this.gameData = GameData.Instance();
 
     const textStyle = {
       fill: 'red',
@@ -119,7 +117,7 @@ export default class BootScene extends Phaser.Scene {
         this.enemy.hp -= 3;
         if (this.enemy.hp <= 0) {
           // Enemy dead! Do dead enemy things!...For now go to boot screen.
-          this.gameData.player.gold += 7;
+          GameData.Player.gold += 7;
           this.switchToMainScene()
         } else {
           this.enemyText.setText(this.getEnemyText())

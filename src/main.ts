@@ -16,7 +16,7 @@ function newGame () {
       autoCenter: Phaser.Scale.CENTER_BOTH
     },
     render: {
-      pixelArt: true,
+      pixelArt: false,
     },
     physics: {
         default: 'arcade',

@@ -5,17 +5,19 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel --no-cache index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ts-node ./node_modules/alsatian/dist/cli/alsatian-cli.js \"./tests/**/*.spec.ts\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "parcel-bundler": "^1.11.0",
+    "parcel-bundler": "^1.12.0",
     "phaser": "^3.16.2"
   },
   "devDependencies": {
-    "@types/webpack-env": "^1.13.8",
+    "alsatian": "^3.0.0-alpha.2",
+    "@types/webpack-env": "^1.13.9",
+    "ts-node": "^8.0.3",
     "typescript": "^3.3.3333"
   }
 }

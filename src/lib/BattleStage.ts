@@ -42,7 +42,10 @@ export default class BattleStage {
                        // sort by roll
                        return b[0] - a[0]
                      })// remove roll
-                     .map(actor => actor[1])
+                     .map(actor => {
+                       //console.log(actor[1].toString(), actor[0])
+                       return actor[1]
+                     })
     }
 
     this.current = this.queue.shift();

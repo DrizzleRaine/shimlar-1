@@ -31,7 +31,6 @@ export class SetOfTests {
     Expect(plant.stats.health).toBeLessThan(oldHP);
   }
 
-  @Ignore("this shows how to ignore tests.")
   @Test("Battles can be completed.")
   public async allTheWayTest() {
     const battle = new Battle({

@@ -22,7 +22,7 @@ export default abstract class BattleCapable {
    * Returns a number that will dictate the order of play. Higher is better.
    */
   inititive() : number {
-    return Random.roll(1, 20);
+    return Random.roll(1, 20) + this.stats.speed;
   }
 
   /**
@@ -38,13 +38,13 @@ export default abstract class BattleCapable {
    * This also provides an opportunity for the actor to animate.
    */
   async decideDamage( amount: number ) : Promise<void> {
-    this.stats.health -= amount;
+    this.stats.health -= amount; // maybe (amount - this.stats.defence) ?
   }
 
   /**
    * To allow for "half damage on miss", opportunities.
    */
   decideHit( amount: number ) : boolean {
-    return amount > 10;
+    return amount > 10 + this.stats.defence;
   }
 }

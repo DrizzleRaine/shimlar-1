@@ -37,9 +37,8 @@ export default abstract class BattleCapable {
    * wearing a shield that halves all damage.
    * This also provides an opportunity for the actor to animate.
    */
-  async decideDamage( amount: number, wasAHit?: boolean ) : Promise<void> {
-    if(wasAHit)
-      this.stats.health -= amount;
+  async decideDamage( amount: number ) : Promise<void> {
+    this.stats.health -= amount;
   }
 
   /**

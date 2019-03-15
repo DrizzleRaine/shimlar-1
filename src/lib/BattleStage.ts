@@ -31,6 +31,12 @@ export default class BattleStage {
   setTurnOrder(_newOrder: Array<BattleCapable>) : void {
     throw 'NotImplemented'
   }
+  hasVictor() : boolean {
+    throw 'NotImplemented'
+  }
+  async getVictors() : Promise<Array<BattleCapable>> {
+    throw 'NotImplemented'
+  }
 }
 
 interface BattleStageOptions {

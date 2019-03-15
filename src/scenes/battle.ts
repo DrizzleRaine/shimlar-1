@@ -1,16 +1,12 @@
 import * as Phaser from 'phaser'
 import { ShimlarKeys } from "../util/ShimlarKeys";
 import GameData from "../data/gameData";
-
-interface BattleEntity {
-  name: string;
-  hp: integer;
-}
+import BattleCapable from "../lib/BattleCapable";
 
 export default class BootScene extends Phaser.Scene {
 
-  private player: BattleEntity;
-  private enemy: BattleEntity;
+  private player: BattleCapable;
+  private enemy: BattleCapable;
   private currentlySelectedMenuItem: number;
 
   private menuAttack: Phaser.GameObjects.Text;
@@ -29,8 +25,8 @@ export default class BootScene extends Phaser.Scene {
   }
 
   init({ player, enemy }) {
-    this.player = player || { name: 'N/A', hp: 5 };
-    this.enemy = enemy || { name: 'enemy', hp: 5 };
+    this.player = player;
+    this.enemy = enemy;
     this.currentlySelectedMenuItem = 0;
   }
 
@@ -83,7 +79,7 @@ export default class BootScene extends Phaser.Scene {
       fill: 'white'
     }).setOrigin(0.5, 0);
 
-    this.add.text(200, 200, this.player.name + " (" + this.player.hp + ")", {
+    this.add.text(200, 200, this.player.name + " (" + this.player.stats.health + ")", {
       ...textStyle,
       fill: 'green'
     }).setOrigin(0.5, 0);
@@ -116,8 +112,8 @@ export default class BootScene extends Phaser.Scene {
       if (menuItemText === "Run") {
         this.switchToMainScene()
       } else if (menuItemText === "Attack") {
-        this.enemy.hp -= 3;
-        if (this.enemy.hp <= 0) {
+        this.enemy.stats.health -= 3;
+        if (this.enemy.stats.health <= 0) {
           // Enemy dead! Do dead enemy things!...For now go to boot screen.
           this.gameData.player.gold += 7;
           this.switchToMainScene()
@@ -135,6 +131,6 @@ export default class BootScene extends Phaser.Scene {
   }
 
   private getEnemyText(): string {
-    return this.enemy.name + " (" + this.enemy.hp + ")";
+    return this.enemy.name + " (" + this.enemy.stats.health + ")";
   }
 }

@@ -3,6 +3,7 @@ import MAP from '../../maps/fantasy.csv'
 import TILES from '../../maps/assets/rts.png'
 // import PLAYER from '../../maps/assets/player?.png'
 import GameData from '../data/gameData';
+import Goblin from '../entities/Goblin';
 
 export default class BootScene extends Phaser.Scene {
 
@@ -67,8 +68,8 @@ export default class BootScene extends Phaser.Scene {
     this.playerGoldText.setText("Gold: " + this.gameData.player.gold);
     if (Phaser.Input.Keyboard.JustDown(this.battleKey)) {
       const data = {
-        player: { name: 'Evan', hp: 50 },
-        enemy: { name: 'Adam', hp: 10 }
+        player: this.gameData.player,
+        enemy: new Goblin()
       };
       this.scene.launch("battle", data);
       this.scene.pause();

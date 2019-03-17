@@ -12,7 +12,11 @@ export default class Goblin extends BattleCapable {
     });
   }
   async act(stage: BattleStage) {
+    await new Promise(res => setTimeout(res, 1500)) // fake animation time?
+
     const target = Random.pick(stage.enemies())
-    target.decideDamage(10)
+    const amount = Random.roll(4) + this.stats.attack
+    stage.log(`${this} attacks ${target} for ${amount} damage.`)
+    await target.decideDamage(amount)
   }
 }

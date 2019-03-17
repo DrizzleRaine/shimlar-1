@@ -3,7 +3,7 @@ import BattleCapable from './BattleCapable'
 export default class BattleStage {
   private current : BattleCapable;
   private queue : Array<BattleCapable> = [];
-  private complete: boolean = false;
+  public complete: boolean = false;
   // which side is active? (for team() and enemies())
   // false = left, true = right
   private side: boolean;
@@ -59,7 +59,7 @@ export default class BattleStage {
     }
   }
 
-  enemies() : Array<BattleCapable> {
+  enemies(includingDead?: boolean) : Array<BattleCapable> {
     // side denotes ACTIVE side. false => left, true => right so we want the opposite.
     let team = this.side ? this.stage.left : this.stage.right;
     return team.filter(this.aliveFilter);
@@ -111,6 +111,7 @@ export default class BattleStage {
 
   log( msg: string ) {
     this.battleLog.push(msg);
+    console.info(`[battle] ${msg}`)
   }
 }
 

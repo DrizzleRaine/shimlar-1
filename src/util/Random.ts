@@ -7,7 +7,7 @@ export default class Random{
       max = min;
       min = 1;
     }
-    return Math.floor(Math.random() * (max - min)) - min
+    return Math.floor(Math.random() * ((max + 1) - min)) + min
   }
 
   public static pick <T> (list: Array<T>) : T {

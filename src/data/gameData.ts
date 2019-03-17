@@ -1,6 +1,7 @@
 import defaultGameData from './sampleGameData.json';
 import BattleCapable from '../lib/BattleCapable';
 import BattleStage from '../lib/BattleStage';
+import Random from '../util/Random';
 
 export default class GameData {
   player: Player;
@@ -25,11 +26,49 @@ export class Player extends BattleCapable {
   constructor() {
     super('Evan', {
       health: 42,
-      attack: +0,
+      attack: +3,
       defence: +0,
       speed: +0
     })
     // you can set the name of player after-the-fact with `player.name = 'new Name'`
+  }
+
+  async doAttack(stage: BattleStage, preSelectedTarget?: BattleCapable) {
+    this.readyToParry = null;
+    const target = preSelectedTarget || Random.pick(stage.enemies());
+    const amount = Random.roll(10) + this.stats.attack
+    stage.log(`${this} attacks ${target} for ${amount} damage.`)
+    await target.decideDamage(amount);
+  }
+
+  // HACK, maybe include the BattleStage as a parameter to this function? Or maybe
+  //   upon begining of battle, have the stage call "setStage" and expect each actor
+  //   to save it locally.
+  private readyToParry: BattleStage = null;
+  async setupDefence(stage: BattleStage) {
+    this.readyToParry = stage;
+    stage.getVictors().then(_ => this.readyToParry = null)
+    stage.log(`${this} lowers his stance.`)
+  }
+  // this function should probabyl have a ref to BattleStage
+  async decideDamage(amount: number) {
+    if(this.readyToParry) {
+      // attempt to parry
+      const roll = Random.roll(1, 3)
+      if(roll === 3) {
+        this.readyToParry.log(`${this} parries!`)
+        const stage = this.readyToParry
+        const target = this.readyToParry.currentActor()
+        await this.doAttack(stage, target);
+        await this.doAttack(stage, target);
+      } else {
+        this.readyToParry.log(`${this} is unable to parry!`)
+        this.stats.health -= amount;
+      }
+      this.readyToParry = null
+    } else {
+      this.stats.health -= amount;
+    }
   }
 
   /**

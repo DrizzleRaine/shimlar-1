@@ -1,7 +1,7 @@
 import BattleStats from './BattleStats';
 import BattleStage from './BattleStage';
 import Random from '../util/Random';
-// import * as Phaser from 'phaser';
+import * as Phaser from 'phaser';
 
 export default abstract class BattleCapable {
 
@@ -49,7 +49,7 @@ export default abstract class BattleCapable {
     return amount > 10 + this.stats.defence;
   }
 
-  // getStagePresence(reference: Phaser.Scene) : Phaser.GameObjects.Container {
-  //   return new Phaser.GameObjects.Container(reference);
-  // }
+  getStagePresence(reference: Phaser.Scene) : Phaser.GameObjects.Container {
+    return new Phaser.GameObjects.Container(reference);
+  }
 }

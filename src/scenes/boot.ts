@@ -5,6 +5,8 @@ import FONT from '../../maps/assets/gba.png'
 // import PLAYER from '../../maps/assets/player?.png'
 import GameData from '../data/gameData';
 import Goblin from '../entities/Goblin';
+import BattleStage from '../lib/BattleStage';
+import Random from '../util/Random';
 
 export default class BootScene extends Phaser.Scene {
 
@@ -80,11 +82,13 @@ export default class BootScene extends Phaser.Scene {
     this.playerDebugText.setText(`X:${this.player.body.x}  Y:${this.player.body.y}`);
     this.gameData.player.gold += 0.001
     if (Phaser.Input.Keyboard.JustDown(this.battleKey)) {
-      const data = {
-        player: this.gameData.player,
-        enemy: new Goblin()
-      };
-      this.scene.launch("battle", data);
+      const enemies = Array.from("E".repeat(Random.roll(3))).map(char => new Goblin())
+      const battle = new BattleStage({
+        left: [ this.gameData.player ],
+        right: enemies
+      });
+      // this.scene.start("gameover")
+      this.scene.launch("battle", battle);
       this.scene.pause();
     }
 

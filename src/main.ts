@@ -2,18 +2,20 @@ import * as Phaser from 'phaser'
 
 import bootScene from './scenes/boot'
 import battleScene from './scenes/battle'
+import gameOverScene from './scenes/gameOver'
 
 function newGame () {
   if (game) return;
   game = new Phaser.Game({
-    width: 300,
-    height: 150,
+    width: 240,
+    height: 160,
     fps: {
       target: 30
     },
     scale: {
       mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_BOTH
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+      // zoom: Phaser.Scale.ZOOM_2X
     },
     render: {
       pixelArt: true,
@@ -26,7 +28,7 @@ function newGame () {
     },
     title: 'Phaser 3 with Parcel 📦',
     url: 'https://github.com/samme/phaser-parcel',
-    scene: [bootScene, battleScene]
+    scene: [bootScene, battleScene, gameOverScene]
   });
 }
 

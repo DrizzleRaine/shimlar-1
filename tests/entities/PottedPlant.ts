@@ -14,6 +14,7 @@ export default class PottedPlant extends BattleCapable {
 
   async act(stage: BattleStage) {
     const target = Random.pick(stage.enemies());
+    stage.log(`${this} attacks ${target} for 5 damage.`)
     target.decideDamage(5);
   }
 }

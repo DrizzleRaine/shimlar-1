@@ -16,6 +16,7 @@ export default class Goblin extends BattleCapable {
   }
   async act(stage: BattleStage) {
     const target = Random.pick(stage.enemies())
+    stage.log(`${this} attacks ${target} for 10 damage.`)
     target.decideDamage(10)
   }
 }

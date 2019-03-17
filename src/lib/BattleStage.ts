@@ -7,6 +7,7 @@ export default class BattleStage {
   // which side is active? (for team() and enemies())
   // false = left, true = right
   private side: boolean;
+  public battleLog: Array<string> = [];
 
   constructor(public stage: BattleStageOptions) {}
 
@@ -24,7 +25,7 @@ export default class BattleStage {
     }
 
     // have a lock on this function, so it can't be called multiple times out of order.
-    let tickcomplete;
+    let tickcomplete: () => void;
     if(this.ticklock) {
       return await this.ticklock
     } else {
@@ -106,6 +107,10 @@ export default class BattleStage {
     let leftSide = this.stage.left.filter(this.aliveFilter).length
     let rightSide = this.stage.right.filter(this.aliveFilter).length
     return [].concat(leftSide > 0 ? this.stage.left : [], rightSide > 0 ? this.stage.right : [])
+  }
+
+  log( msg: string ) {
+    this.battleLog.push(msg);
   }
 }
 

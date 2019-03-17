@@ -9,13 +9,14 @@ export default class BootScene extends Phaser.Scene {
   private enemy: BattleCapable;
   private currentlySelectedMenuItem: number;
 
-  private menuAttack: Phaser.GameObjects.Text;
-  private menuDefend: Phaser.GameObjects.Text;
-  private menuRun: Phaser.GameObjects.Text;
-  private menuItems: Array<Phaser.GameObjects.Text>;
+  private menuAttack: Phaser.GameObjects.BitmapText;
+  private menuDefend: Phaser.GameObjects.BitmapText;
+  private menuRun: Phaser.GameObjects.BitmapText;
+  private menuItems: Array<Phaser.GameObjects.BitmapText>;
+  private menuSelector: Phaser.GameObjects.BitmapText;
 
   private keys: ShimlarKeys;
-  private enemyText: Phaser.GameObjects.Text;
+  private enemyText: Phaser.GameObjects.BitmapText;
   private gameData: GameData;
 
   constructor() {
@@ -36,8 +37,8 @@ export default class BootScene extends Phaser.Scene {
     } else if (itemSelected < 0) {
       itemSelected = this.menuItems.length - 1;
     }
-    this.menuItems[this.currentlySelectedMenuItem].setColor('grey');
-    this.menuItems[itemSelected].setColor('white');
+    this.menuSelector.x = this.menuItems[itemSelected].x - 10;
+    this.menuSelector.y = this.menuItems[itemSelected].y;
     this.currentlySelectedMenuItem = itemSelected;
   }
 
@@ -53,42 +54,20 @@ export default class BootScene extends Phaser.Scene {
     this.add.rectangle(0,0, +this.game.config.width, +this.game.config.height, 0x1a1a1a)
     .setOrigin(0,0);
 
-    this.menuAttack = this.add.text(400, 350, "Attack", {
-      ...textStyle,
-      fill: 'grey',
-      fontSize: 28
-    }).setOrigin(0.5, 0);
-
-    this.menuDefend = this.add.text(400, 385, "Defend", {
-      ...textStyle,
-      fill: 'grey',
-      fontSize: 28
-    }).setOrigin(0.5, 0);
-
-    this.menuRun = this.add.text(400, 420, "Run", {
-      ...textStyle,
-      fill: 'grey',
-      fontSize: 28
-    }).setOrigin(0.5, 0);
+    this.menuAttack = this.add.bitmapText(20, 110, "script", "ATTACK").setOrigin(0, 0);
+    this.menuDefend = this.add.bitmapText(20, 120, "script", "DEFEND").setOrigin(0.0, 0);
+    this.menuRun    = this.add.bitmapText(20, 130, "script", "RUN").setOrigin(0, 0);
+    this.menuSelector = this.add.bitmapText(10, 110, "script", "◀").setOrigin(0,0);
 
     this.menuItems = [this.menuAttack, this.menuDefend, this.menuRun];
     this.selectMenuItem(0);
 
-    this.add.text(400, 50, "Battle", {
-      ...textStyle,
-      fill: 'white'
-    }).setOrigin(0.5, 0);
+    this.add.bitmapText(20, 20, "script", (this.player.name + " (" + this.player.stats.health + ")").toUpperCase()).setOrigin(0, 0);
+    this.add.rectangle(30, 70, 20, 20, 0x00ff00);
 
-    this.add.text(200, 200, this.player.name + " (" + this.player.stats.health + ")", {
-      ...textStyle,
-      fill: 'green'
-    }).setOrigin(0.5, 0);
-    this.add.rectangle(200, 300, 50, 50, 0x00ff00);
-
-    this.enemyText = this.add.text(600, 200, this.getEnemyText(), textStyle)
-      .setOrigin(0.5, 0);
-    this.add.triangle(630, 300,
-      0, 0, -30, 50, 30, 50,
+    this.enemyText = this.add.bitmapText(280, 20, "script", this.getEnemyText()).setOrigin(1, 0);
+    this.add.triangle(275, 70,
+      0, 0, -12, 20, 12, 20,
       0xff0000);
 
     this.keys = new ShimlarKeys;
@@ -109,9 +88,9 @@ export default class BootScene extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.keys.enter)) {
       const menuItemText = this.menuItems[this.currentlySelectedMenuItem].text;
       console.log(menuItemText);
-      if (menuItemText === "Run") {
+      if (menuItemText === "RUN") {
         this.switchToMainScene()
-      } else if (menuItemText === "Attack") {
+      } else if (menuItemText === "ATTACK") {
         this.enemy.stats.health -= 3;
         if (this.enemy.stats.health <= 0) {
           // Enemy dead! Do dead enemy things!...For now go to boot screen.
@@ -131,6 +110,6 @@ export default class BootScene extends Phaser.Scene {
   }
 
   private getEnemyText(): string {
-    return this.enemy.name + " (" + this.enemy.stats.health + ")";
+    return (this.enemy.name + " (" + this.enemy.stats.health + ")").toUpperCase();
   }
 }

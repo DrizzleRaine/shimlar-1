@@ -6,11 +6,19 @@ import Random from '../util/Random';
 export default class GameData {
   player: Player;
 
+  private static PLAYER_DATA_KEY = "game_data";
   private static _instance: GameData;
 
   private constructor() {
     this.player = new Player();
-    Object.assign(this.player, defaultGameData.playerData)
+
+    const loadedPlayerData = localStorage.getItem(GameData.PLAYER_DATA_KEY);
+    if (loadedPlayerData == null) {
+      Object.assign(this.player, defaultGameData.playerData)
+    } else {
+      console.log('Loading saved data');
+      Object.assign(this.player, JSON.parse(loadedPlayerData));
+    }
   }
 
   public static Instance(): GameData {
@@ -18,6 +26,11 @@ export default class GameData {
       this._instance = new GameData();
     }
     return this._instance;
+  }
+
+  public saveDate() {
+    console.log('SAVING DATA');
+    localStorage.setItem(GameData.PLAYER_DATA_KEY, JSON.stringify(this.player));
   }
 }
 

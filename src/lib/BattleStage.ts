@@ -50,7 +50,7 @@ export default class BattleStage {
     }
 
     this.current = this.queue.shift();
-    this.side = this.stage.left.includes(this.current) ? false : true;
+    this.side = !this.stage.left.includes(this.current);
     try {
       await this.current.act(this);
     } finally {

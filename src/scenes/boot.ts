@@ -17,6 +17,8 @@ export default class BootScene extends Phaser.Scene {
   private player: Phaser.GameObjects.GameObject;
   private keys: Phaser.Input.Keyboard.CursorKeys;
   private battleKey: Phaser.Input.Keyboard.Key;
+  private saveKey: Phaser.Input.Keyboard.Key;
+  private saveTimeSeconds: integer = 0;
   private playerSpeed: integer = 300;
   private gameData: GameData;
   private playerGoldText: Phaser.GameObjects.BitmapText;
@@ -65,6 +67,7 @@ export default class BootScene extends Phaser.Scene {
 
     this.keys = this.input.keyboard.createCursorKeys();
     this.battleKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.saveKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
     this.playerDebugText = this.add.bitmapText(10, 10, 'script', "")
     .setOrigin(0, 0)
@@ -80,14 +83,24 @@ export default class BootScene extends Phaser.Scene {
     // Probably shouldn't do this every frame...:P
     this.playerGoldText.setText(("Gold: " + this.gameData.player.gold.toFixed(0)).toUpperCase());
     this.playerDebugText.setText(`X:${this.player.body.x}  Y:${this.player.body.y}`);
-    this.gameData.player.gold += 0.001
+
+    if (Phaser.Input.Keyboard.JustDown(this.saveKey)) {
+      const currentTimeSeconds: integer = Math.floor(Date.now() / 1000);
+      if (currentTimeSeconds - this.saveTimeSeconds > 5) {
+        // SAVE
+        this.saveTimeSeconds = currentTimeSeconds;
+        this.gameData.saveDate();
+      } else {
+        // Don't save, we've saved in the last 5 seconds. Maybe we should output a message.
+      }
+    }
+
     if (Phaser.Input.Keyboard.JustDown(this.battleKey)) {
       const enemies = Array.from("E".repeat(Random.roll(3))).map(char => new Goblin())
       const battle = new BattleStage({
         left: [ this.gameData.player ],
         right: enemies
       });
-      // this.scene.start("gameover")
       this.scene.launch("battle", battle);
       this.scene.pause();
     }

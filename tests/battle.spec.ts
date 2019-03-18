@@ -27,7 +27,7 @@ export class SetOfTests {
       right: [ plant ]
     });
     const oldHP = plant.stats.health;
-    await battle.tick() // one turn
+    await battle.tick(); // one turn
     Expect(plant.stats.health).toBeLessThan(oldHP);
   }
 
@@ -41,7 +41,7 @@ export class SetOfTests {
     });
     do {
       await battle.tick();
-    } while( !battle.hasVictor() )
+    } while (!battle.hasVictor());
     let victors = await battle.getVictors();
     Expect(victors).not.toBeNull();
     Expect(victors).toContain(goblin);

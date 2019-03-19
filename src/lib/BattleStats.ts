@@ -1,4 +1,3 @@
-
 export default class BattleStats {
   health: number;
   attack: number;

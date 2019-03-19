@@ -30,12 +30,12 @@ export default class BootScene extends Phaser.Scene {
     this.battle = battle;
     this.battle.getVictors().then(alive => {
       console.log("battle complete. survivors: ", alive)
-      if(alive.includes(this.gameData.player)) {
+      if (alive.includes(this.gameData.player)) {
         const bodyCount =
-          [...this.battle.stage.left, ...this.battle.stage.right]
-          .filter(body =>
-            body != this.gameData.player && body.stats.health <= 0
-          ).length;
+          [ ...this.battle.stage.left, ...this.battle.stage.right ]
+            .filter(body =>
+              body != this.gameData.player && body.stats.health <= 0
+            ).length;
         const goldAmt = Random.roll(0, 10 * bodyCount) + 1 * bodyCount
         this.gameData.player.gold += goldAmt;
         console.log("gold aquired: ", goldAmt);
@@ -43,7 +43,7 @@ export default class BootScene extends Phaser.Scene {
       } else {
         this.switchToGameOver();
       }
-    })
+    });
 
     this.currentlySelectedMenuItem = 0;
   }
@@ -54,23 +54,23 @@ export default class BootScene extends Phaser.Scene {
     } else if (itemSelected < 0) {
       itemSelected = this.menuItems.length - 1;
     }
-    this.menuSelector.x = this.menuItems[itemSelected].x - 10;
-    this.menuSelector.y = this.menuItems[itemSelected].y;
+    this.menuSelector.x = this.menuItems[ itemSelected ].x - 10;
+    this.menuSelector.y = this.menuItems[ itemSelected ].y;
     this.currentlySelectedMenuItem = itemSelected;
   }
 
   create() {
     this.gameData = GameData.Instance();
 
-    this.add.rectangle(0,0, +this.game.config.width, +this.game.config.height, 0x1a1a1a)
-    .setOrigin(0,0);
+    this.add.rectangle(0, 0, +this.game.config.width, +this.game.config.height, 0x1a1a1a)
+      .setOrigin(0, 0);
 
     this.menuAttack = this.add.bitmapText(20, 120, "script", "ATTACK").setOrigin(0, 0);
     this.menuDefend = this.add.bitmapText(20, 130, "script", "DEFEND").setOrigin(0.0, 0);
-    this.menuRun    = this.add.bitmapText(20, 140, "script", "RUN").setOrigin(0, 0);
-    this.menuSelector = this.add.bitmapText(10, 110, "script", "◀").setOrigin(0,0);
+    this.menuRun = this.add.bitmapText(20, 140, "script", "RUN").setOrigin(0, 0);
+    this.menuSelector = this.add.bitmapText(10, 110, "script", "◀").setOrigin(0, 0);
 
-    this.menuItems = [this.menuAttack, this.menuDefend, this.menuRun];
+    this.menuItems = [ this.menuAttack, this.menuDefend, this.menuRun ];
     this.selectMenuItem(0);
 
     this.setupBattleSpace(this.battle.stage.left, true);
@@ -86,26 +86,27 @@ export default class BootScene extends Phaser.Scene {
 
   private allLabels: Array<Array<any>> = [] // HACK: I would have liked a Map<Actors,BitmapText> but typescript doesn't like it.
   setupBattleSpace(actors: Array<BattleCapable>, alignLeft: boolean): void {
-    const max = 120; const min = 20;
+    const max = 120;
+    const min = 20;
     for (let i = 0; i < actors.length; i++) {
-        const entity = actors[i].getStagePresence(this);
-        const yPosition = (max - min) / (actors.length + 1) * (i + 1) + min;
-        const xPosition = alignLeft ? 10 : (230 - entity.width);
-        entity.setX(xPosition);
-        entity.setY(yPosition);
-        this.add.existing(entity)
-        this.allLabels.push([
-          actors[i],
-          this.add.bitmapText(alignLeft ? 10 : 230, yPosition + 10, 'script', '')
+      const entity = actors[ i ].getStagePresence(this);
+      const yPosition = (max - min) / (actors.length + 1) * (i + 1) + min;
+      const xPosition = alignLeft ? 10 : (230 - entity.width);
+      entity.setX(xPosition);
+      entity.setY(yPosition);
+      this.add.existing(entity)
+      this.allLabels.push([
+        actors[ i ],
+        this.add.bitmapText(alignLeft ? 10 : 230, yPosition + 10, 'script', '')
           .setOrigin(alignLeft ? 0 : 1, 0)
-        ]);
+      ]);
     }
   }
 
   private renderLabels() {
     for (let i = 0; i < this.allLabels.length; i++) {
-        const [actor, label] = this.allLabels[i];
-        label.setText(`${actor} (${actor.stats.health}♥)`.toUpperCase())
+      const [ actor, label ] = this.allLabels[ i ];
+      label.setText(`${actor} (${actor.stats.health}♥)`.toUpperCase())
         .setAlpha(this.battle.currentActor() === actor ? 1 : 0.3)
     }
   }
@@ -115,7 +116,7 @@ export default class BootScene extends Phaser.Scene {
     // this should probably only run after a battle tick?
     this.renderLabels();
 
-    if(!this.battle.hasVictor() && this.battle.currentActor() === this.gameData.player) {
+    if (!this.battle.hasVictor() && this.battle.currentActor() === this.gameData.player) {
       // it's our turn.
       this.menuSelector.clearAlpha()
       if (Phaser.Input.Keyboard.JustDown(this.keys.up) || Phaser.Input.Keyboard.JustDown(this.keys.w)) {
@@ -125,7 +126,7 @@ export default class BootScene extends Phaser.Scene {
         this.selectMenuItem(this.currentlySelectedMenuItem + 1);
       }
       if (Phaser.Input.Keyboard.JustDown(this.keys.enter)) {
-        const menuItemText = this.menuItems[this.currentlySelectedMenuItem].text;
+        const menuItemText = this.menuItems[ this.currentlySelectedMenuItem ].text;
         this.menuSelector.setAlpha(0)
         if (menuItemText === this.menuRun.text) {
           this.gameData.player.setAction(async (stage) => {

@@ -5,24 +5,26 @@ import * as Phaser from 'phaser';
 
 export default abstract class BattleCapable {
 
-  constructor(public name: string, public stats: BattleStats) {}
+  constructor(public name: string, public stats: BattleStats) {
+  }
 
   /**
    * Returns a unique name that can be used in the Battle Log.
    */
-  toString() : string {
+  toString(): string {
     return this.name;
   }
 
   /**
    * Get the base stat values for the individual
    */
+
   //stats(): BattleStats;
 
   /**
    * Returns a number that will dictate the order of play. Higher is better.
    */
-  inititive() : number {
+  inititive(): number {
     return Random.roll(1, 20) + this.stats.speed;
   }
 
@@ -30,7 +32,7 @@ export default abstract class BattleCapable {
    * Called when it's the entity's turn. This is where you would perform
    * the individual's logic and animation.
    */
-  abstract act( state: BattleStage ) : Promise<void>;
+  abstract act(state: BattleStage): Promise<void>;
 
   /**
    * Notify the entity that it should take the given amount of damage. It is up
@@ -38,18 +40,18 @@ export default abstract class BattleCapable {
    * wearing a shield that halves all damage.
    * This also provides an opportunity for the actor to animate.
    */
-  async decideDamage( amount: number ) : Promise<void> {
+  async decideDamage(amount: number): Promise<void> {
     this.stats.health -= amount; // maybe (amount - this.stats.defence) ?
   }
 
   /**
    * To allow for "half damage on miss", opportunities.
    */
-  decideHit( amount: number ) : boolean {
+  decideHit(amount: number): boolean {
     return amount > 10 + this.stats.defence;
   }
 
-  getStagePresence(reference: Phaser.Scene) : Phaser.GameObjects.Container {
+  getStagePresence(reference: Phaser.Scene): Phaser.GameObjects.Container {
     return new Phaser.GameObjects.Container(reference);
   }
 }

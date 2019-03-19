@@ -2,16 +2,16 @@ import * as Phaser from 'phaser'
 import MAP from '../../maps/fantasy.csv'
 import TILES from '../../maps/assets/rts.png'
 import FONT from '../../maps/assets/gba.png'
-// import PLAYER from '../../maps/assets/player?.png'
 import GameData from '../data/gameData';
 import Goblin from '../entities/Goblin';
 import BattleStage from '../lib/BattleStage';
 import Random from '../util/Random';
 
+const START_X: integer = 700;
+const START_Y: integer = 700;
+
 export default class BootScene extends Phaser.Scene {
 
-  private x: integer = 700;
-  private y: integer = 700;
   private map: Phaser.Tilemaps.Tilemap;
   private tileset: Phaser.Tilemaps.Tileset;
   private player: Phaser.GameObjects.GameObject;
@@ -41,24 +41,24 @@ export default class BootScene extends Phaser.Scene {
     console.log("running scene");
     this.gameData = GameData.Instance();
     const config = {
-        image: 'font',
-        width: 8,
-        height: 8,
-        chars: ' !"©♥%◀\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ¿ab⬆⬇',
-        charsPerRow: 80
+      image: 'font',
+      width: 8,
+      height: 8,
+      chars: ' !"©♥%◀\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ¿ab⬆⬇',
+      charsPerRow: 80
     };
     //@ts-ignore the RetroFont.Parse function is incorrectly typed.
     this.cache.bitmapFont.add('script', Phaser.GameObjects.RetroFont.Parse(this, config));
 
     // Create the specifications for our map that matched the Tiled settings.
-    this.map = this.make.tilemap({key:'map', tileWidth: 126, tileHeight: 126});
+    this.map = this.make.tilemap({ key: 'map', tileWidth: 126, tileHeight: 126 });
     // Set the Ground layer in our map to the asset `tiles`, specifying the
     // size of  the tiles.
     this.tileset = this.map.addTilesetImage('Ground', 'tiles', 126, 126, 65, 66);
     // Render a single static texture from layer 0 aka Ground
     this.map.createStaticLayer(0, this.tileset, 0, 0);
 
-    this.player = this.add.circle(this.x, this.y, 12, 0xff0000);
+    this.player = this.add.circle(START_X, START_Y, 8, 0xff0000);
     this.physics.add.existing(this.player);
 
     // set the camera to stay within our map, when following the player.
@@ -70,8 +70,8 @@ export default class BootScene extends Phaser.Scene {
     this.saveKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
     this.playerDebugText = this.add.bitmapText(10, 10, 'script', "")
-    .setOrigin(0, 0)
-    .setScrollFactor(0); // fix it to the top
+      .setOrigin(0, 0)
+      .setScrollFactor(0); // fix it to the top
 
     this.playerGoldText = this.add.bitmapText(10, 12, 'script', "Gold: " + this.gameData.player.gold)
       .setOrigin(0, -1)
@@ -106,16 +106,16 @@ export default class BootScene extends Phaser.Scene {
     }
 
     this.player.body.setVelocity(0);
-    if(this.keys.left.isDown) {
+    if (this.keys.left.isDown) {
       this.player.body.setVelocityX(-this.playerSpeed)
     }
-    if(this.keys.right.isDown) {
+    if (this.keys.right.isDown) {
       this.player.body.setVelocityX(this.playerSpeed)
     }
-    if(this.keys.up.isDown) {
+    if (this.keys.up.isDown) {
       this.player.body.setVelocityY(-this.playerSpeed)
     }
-    if(this.keys.down.isDown) {
+    if (this.keys.down.isDown) {
       this.player.body.setVelocityY(this.playerSpeed)
     }
   }

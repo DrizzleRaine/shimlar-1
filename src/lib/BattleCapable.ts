@@ -51,7 +51,7 @@ export default abstract class BattleCapable {
     return amount > 10 + this.stats.defence;
   }
 
-  getStagePresence(reference: Phaser.Scene): Phaser.GameObjects.Container {
-    return new Phaser.GameObjects.Container(reference);
+  getStagePresence(reference: Phaser.Scene): Phaser.GameObjects.Sprite {
+    return null;
   }
 }

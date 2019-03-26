@@ -36,6 +36,8 @@ export default class GameData {
 
 export class Player extends BattleCapable {
   public gold: integer;
+  private character: Phaser.GameObjects.Sprite;
+
   constructor() {
     super('Evan', {
       health: 42,
@@ -82,6 +84,18 @@ export class Player extends BattleCapable {
     } else {
       this.stats.health -= amount;
     }
+  }
+
+  getStagePresence(reference: Phaser.Scene) : Phaser.GameObjects.Sprite {
+    this.character = new Phaser.GameObjects.Sprite(reference, 0, 0, "player", 11)
+    reference.anims.create({
+      key: 'walk',
+      frames: reference.anims.generateFrameNumbers('player', { start: 1, end: 4 }),
+      frameRate: 2,
+      repeat: Infinity
+    });
+    this.character.anims.play("walk")
+    return this.character;
   }
 
   /**

@@ -2,6 +2,8 @@ import * as Phaser from 'phaser'
 import MAP from '../../maps/fantasy.csv'
 import TILES from '../../maps/assets/rts.png'
 import FONT from '../../maps/assets/gba.png'
+import PLAYER from '../../maps/assets/player.png'
+import GOBLIN from '../../maps/assets/goblin.png'
 import GameData from '../data/gameData';
 import Goblin from '../entities/Goblin';
 import BattleStage from '../lib/BattleStage';
@@ -34,7 +36,8 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('tiles', TILES);
     this.load.tilemapCSV('map', MAP);
     this.load.image('font', FONT);
-    // this.load.image('player', PLAYER);
+    this.load.spritesheet('player', PLAYER, {frameWidth: 18, frameHeight: 24});
+    this.load.image('goblin', GOBLIN);
   }
 
   create() {

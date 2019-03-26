@@ -86,18 +86,22 @@ export default class BootScene extends Phaser.Scene {
 
   private allLabels: Array<Array<any>> = [] // HACK: I would have liked a Map<Actors,BitmapText> but typescript doesn't like it.
   setupBattleSpace(actors: Array<BattleCapable>, alignLeft: boolean): void {
-    const max = 120;
-    const min = 20;
+    const max = 160;
+    const min = 0;
     for (let i = 0; i < actors.length; i++) {
-      const entity = actors[ i ].getStagePresence(this);
-      const yPosition = (max - min) / (actors.length + 1) * (i + 1) + min;
-      const xPosition = alignLeft ? 10 : (230 - entity.width);
-      entity.setX(xPosition);
-      entity.setY(yPosition);
-      this.add.existing(entity)
-      this.allLabels.push([
-        actors[ i ],
-        this.add.bitmapText(alignLeft ? 10 : 230, yPosition + 10, 'script', '')
+        const entity = actors[i].getStagePresence(this);
+        const yPosition = (max - min) / (actors.length + 1) * (i + 1);
+        const xPosition = alignLeft ? 10 : 230;
+        if(entity != null) {
+          entity.setX(xPosition);
+          entity.setY(yPosition);
+          entity.setFlipX(alignLeft);
+          entity.setOrigin(alignLeft?0:1, 1)
+          this.add.existing(entity)
+        }
+        this.allLabels.push([
+          actors[i],
+          this.add.bitmapText(alignLeft ? 10 : 230, yPosition + 1, 'script', '')
           .setOrigin(alignLeft ? 0 : 1, 0)
       ]);
     }

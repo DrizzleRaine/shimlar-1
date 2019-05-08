@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import MAP from '../../maps/fantasy.csv'
+import MAP from '../../maps/fantasy.json'
 import TILES from '../../maps/assets/rts.png'
 import FONT from '../../maps/assets/gba.png'
 import PLAYER from '../../maps/assets/player.png'
@@ -25,6 +25,7 @@ export default class BootScene extends Phaser.Scene {
   private gameData: GameData;
   private playerGoldText: Phaser.GameObjects.BitmapText;
   private playerDebugText: Phaser.GameObjects.BitmapText;
+  private mobs: Array<Phaser.GameObjects.Sprite>;
 
   constructor() {
     super({
@@ -34,7 +35,7 @@ export default class BootScene extends Phaser.Scene {
 
   preload() {
     this.load.image('tiles', TILES);
-    this.load.tilemapCSV('map', MAP);
+    this.load.tilemapTiledJSON('map', MAP);
     this.load.image('font', FONT);
     this.load.spritesheet('player', PLAYER, {frameWidth: 18, frameHeight: 24});
     this.load.image('goblin', GOBLIN);
@@ -57,12 +58,17 @@ export default class BootScene extends Phaser.Scene {
     this.map = this.make.tilemap({ key: 'map', tileWidth: 126, tileHeight: 126 });
     // Set the Ground layer in our map to the asset `tiles`, specifying the
     // size of  the tiles.
-    this.tileset = this.map.addTilesetImage('Ground', 'tiles', 126, 126, 65, 66);
+    this.tileset = this.map.addTilesetImage('rts', 'tiles')//, 126, 126, 65, 66);
     // Render a single static texture from layer 0 aka Ground
-    this.map.createStaticLayer(0, this.tileset, 0, 0);
+    let layer = this.map.createStaticLayer(0, this.tileset, 0, 0);
+    layer.setCollisionByProperty({ collides: true });
 
     this.player = this.add.circle(START_X, START_Y, 8, 0xff0000);
     this.physics.add.existing(this.player);
+    this.physics.add.collider(this.player, layer);
+    // maybe don't use a statically defined size and dynamically figure it out
+    this.player.body.collideWorldBounds = true;
+    this.physics.world.setBounds(0, 0, 128 * 32, 128 * 32)
 
     // set the camera to stay within our map, when following the player.
     this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -121,6 +127,7 @@ export default class BootScene extends Phaser.Scene {
     if (this.keys.down.isDown) {
       this.player.body.setVelocityY(this.playerSpeed)
     }
+    // this.player.body.velocity.normalize().scale(speed); // todo
   }
 
 }

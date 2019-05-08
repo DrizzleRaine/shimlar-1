@@ -19,6 +19,7 @@ export default class BootScene extends Phaser.Scene {
   private player: Phaser.GameObjects.GameObject;
   private keys: Phaser.Input.Keyboard.CursorKeys;
   private battleKey: Phaser.Input.Keyboard.Key;
+  private statusKey: Phaser.Input.Keyboard.Key;
   private saveKey: Phaser.Input.Keyboard.Key;
   private saveTimeSeconds: integer = 0;
   private playerSpeed: integer = 300;
@@ -76,6 +77,7 @@ export default class BootScene extends Phaser.Scene {
 
     this.keys = this.input.keyboard.createCursorKeys();
     this.battleKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.statusKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     this.saveKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
     this.playerDebugText = this.add.bitmapText(10, 10, 'script', "")
@@ -114,6 +116,14 @@ export default class BootScene extends Phaser.Scene {
       this.scene.pause();
     }
 
+    if (Phaser.Input.Keyboard.JustDown(this.statusKey)) {
+      console.info("A Test1!");
+        this.scene.launch("statusscreen");
+      console.info("A Test2!");
+        this.scene.pause();
+
+    }
+
     this.player.body.setVelocity(0);
     if (this.keys.left.isDown) {
       this.player.body.setVelocityX(-this.playerSpeed)
@@ -130,4 +140,8 @@ export default class BootScene extends Phaser.Scene {
     // this.player.body.velocity.normalize().scale(speed); // todo
   }
 
+
+
 }
+
+

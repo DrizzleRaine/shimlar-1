@@ -40,6 +40,7 @@ export class Player extends BattleCapable {
 
   constructor() {
     super('Evan', {
+      maxHealth: 42,
       health: 42,
       attack: +3,
       defence: +0,
@@ -54,6 +55,15 @@ export class Player extends BattleCapable {
     const amount = Random.roll(10) + this.stats.attack
     stage.log(`${this} attacks ${target} for ${amount} damage.`)
     await target.decideDamage(amount);
+  }
+
+
+  async doRest(stage: BattleStage, self?: BattleCapable) {
+    stage.log(`${this} rests for a moment.`)
+    self.stats.health+=self.stats.maxHealth*.5;
+    if (self.stats.health>=self.stats.maxHealth) {
+      self.stats.health=self.stats.maxHealth;
+    }
   }
 
   // HACK, maybe include the BattleStage as a parameter to this function? Or maybe
@@ -121,4 +131,6 @@ export class Player extends BattleCapable {
     this.readyToAct = false;
     this.ourTriggerResolver(callback);
   }
+
+
 }

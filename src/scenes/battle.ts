@@ -12,6 +12,7 @@ export default class BootScene extends Phaser.Scene {
 
   private menuAttack: Phaser.GameObjects.BitmapText;
   private menuDefend: Phaser.GameObjects.BitmapText;
+  private menuRest: Phaser.GameObjects.BitmapText;
   private menuRun: Phaser.GameObjects.BitmapText;
   private menuItems: Array<Phaser.GameObjects.BitmapText>;
   private menuSelector: Phaser.GameObjects.BitmapText;
@@ -67,10 +68,11 @@ export default class BootScene extends Phaser.Scene {
 
     this.menuAttack = this.add.bitmapText(20, 120, "script", "ATTACK").setOrigin(0, 0);
     this.menuDefend = this.add.bitmapText(20, 130, "script", "DEFEND").setOrigin(0.0, 0);
-    this.menuRun = this.add.bitmapText(20, 140, "script", "RUN").setOrigin(0, 0);
+    this.menuRest = this.add.bitmapText(20,140,"script","REST").setOrigin(0,0);
+    this.menuRun = this.add.bitmapText(20, 150, "script", "RUN").setOrigin(0, 0);
     this.menuSelector = this.add.bitmapText(10, 110, "script", "◀").setOrigin(0, 0);
 
-    this.menuItems = [ this.menuAttack, this.menuDefend, this.menuRun ];
+    this.menuItems = [ this.menuAttack, this.menuDefend, this.menuRest, this.menuRun ];
     this.selectMenuItem(0);
 
     this.setupBattleSpace(this.battle.stage.left, true);
@@ -139,6 +141,10 @@ export default class BootScene extends Phaser.Scene {
         } else if (menuItemText === this.menuAttack.text) {
           this.gameData.player.setAction(async (stage) => {
             this.gameData.player.doAttack(stage)
+          })
+        } else if (menuItemText === this.menuRest.text) {
+          this.gameData.player.setAction(async (stage) => {
+            this.gameData.player.doRest(stage,this.battle.currentActor())
           })
         } else if (menuItemText === this.menuDefend.text) {
           this.gameData.player.setAction(async (stage) => {

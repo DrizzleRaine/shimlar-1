@@ -37,6 +37,7 @@ export default class GameData {
 export class Player extends BattleCapable {
   public gold: integer;
   private character: Phaser.GameObjects.Sprite;
+    public statPoints: integer = 1;
 
   constructor() {
     super('Evan', {
@@ -52,14 +53,14 @@ export class Player extends BattleCapable {
   async doAttack(stage: BattleStage, preSelectedTarget?: BattleCapable) {
     this.readyToParry = null;
     const target = preSelectedTarget || Random.pick(stage.enemies());
-    const amount = Random.roll(10) + this.stats.attack
-    stage.log(`${this} attacks ${target} for ${amount} damage.`)
+      const amount = Random.roll(10) + this.stats.attack;
+      stage.log(`${this} attacks ${target} for ${amount} damage.`);
     await target.decideDamage(amount);
   }
 
 
   async doRest(stage: BattleStage, self?: BattleCapable) {
-    stage.log(`${this} rests for a moment.`)
+      stage.log(`${this} rests for a moment.`);
     self.stats.health+=self.stats.maxHealth*.5;
     if (self.stats.health>=self.stats.maxHealth) {
       self.stats.health=self.stats.maxHealth;

@@ -117,9 +117,7 @@ export default class BootScene extends Phaser.Scene {
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.statusKey)) {
-      console.info("A Test1!");
-        this.scene.launch("statusscreen");
-      console.info("A Test2!");
+      this.scene.launch("statusscreen", this.gameData.player);
         this.scene.pause();
 
     }

@@ -9,6 +9,7 @@ export default class Goblin extends BattleCapable {
 
   constructor() {
     super("Avarice", {
+      maxHealth: 12,
       health: 12,
       attack: +3,
       defence: +2,

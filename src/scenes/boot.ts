@@ -102,8 +102,9 @@ export default class BootScene extends Phaser.Scene {
         this.add.bitmapText(1194, 1389, 'script', "⬆ black bar happens because the rts.png tileset rows aren't evenly spaced.".toUpperCase())
 
         this.mobs.push(new Phaser.GameObjects.Sprite(this, START_X + 25, START_Y + 25, "worldmapmonster"));
+        var timedEvent = this.time.addEvent({delay: 3000, callback: this.spawnMob, callbackScope: this, loop: true});
+        this.spawnMob();
 
-        this.add.existing(this.mobs[0]);
     }
 
     update() {
@@ -179,6 +180,20 @@ export default class BootScene extends Phaser.Scene {
         }
         console.log(enemyArray);
         return enemyArray;
+    }
+
+    // TODO: Extremely bad way to do this. Much better would be reusing the same sprites just changing the count. More research needed.
+    spawnMob() {
+        this.mobs.forEach(function (element) {
+            element.destroy();
+        });
+        this.mobs = new Array();
+        var enemyCount: integer = Random.roll(2) + 1;
+        for (var i = 0; i < enemyCount; i++) {
+            this.mobs.push(new Phaser.GameObjects.Sprite(this, this.player.body.x + Random.roll(100) - 50, this.player.body.y + Random.roll(100) - 50, "worldmapmonster"));
+            this.add.existing(this.mobs[i]);
+        }
+
     }
 
 }

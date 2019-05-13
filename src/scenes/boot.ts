@@ -5,9 +5,12 @@ import FONT from '../../maps/assets/gba.png'
 import PLAYER from '../../maps/assets/player.png'
 import GOBLIN from '../../maps/assets/goblin.png'
 import ZOMBIE from '../../maps/assets/zombie.png'
+import GREENDRAGON from '../../maps/assets/greendragon.png'
 import GameData from '../data/gameData';
 import Goblin from '../entities/Goblin';
 import Zombie from '../entities/Zombie';
+import GreenDragon from '../entities/GreenDragon';
+import WORLDMAPMONSTER from '../../maps/assets/worldmapmonster.png'
 import BattleStage from '../lib/BattleStage';
 import Random from '../util/Random';
 import BattleCapable from "../lib/BattleCapable";
@@ -30,7 +33,8 @@ export default class BootScene extends Phaser.Scene {
     private gameData: GameData;
     private playerGoldText: Phaser.GameObjects.BitmapText;
     private playerDebugText: Phaser.GameObjects.BitmapText;
-    private mobs: Array<Phaser.GameObjects.Sprite>;
+    private mobs: Array<Phaser.GameObjects.Sprite> = new Array();
+
 
     constructor() {
         super({
@@ -45,6 +49,8 @@ export default class BootScene extends Phaser.Scene {
         this.load.spritesheet('player', PLAYER, {frameWidth: 18, frameHeight: 24});
         this.load.image('goblin', GOBLIN);
         this.load.image('zombie', ZOMBIE);
+        this.load.image('greendragon', GREENDRAGON);
+        this.load.image('worldmapmonster', WORLDMAPMONSTER);
     }
 
 
@@ -94,6 +100,10 @@ export default class BootScene extends Phaser.Scene {
             .setOrigin(0, -1)
             .setScrollFactor(0, 0); // fix it to the top left
         this.add.bitmapText(1194, 1389, 'script', "⬆ black bar happens because the rts.png tileset rows aren't evenly spaced.".toUpperCase())
+
+        this.mobs.push(new Phaser.GameObjects.Sprite(this, START_X + 25, START_Y + 25, "worldmapmonster"));
+
+        this.add.existing(this.mobs[0]);
     }
 
     update() {
@@ -125,7 +135,6 @@ export default class BootScene extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.statusKey)) {
             this.scene.launch("statusscreen", this.gameData.player);
             this.scene.pause();
-
         }
 
         this.player.body.setVelocity(0);
@@ -141,21 +150,28 @@ export default class BootScene extends Phaser.Scene {
         if (this.keys.down.isDown) {
             this.player.body.setVelocityY(this.playerSpeed)
         }
+
+
         // this.player.body.velocity.normalize().scale(speed); // todo
     }
 
-
     createEnemyGroup(): BattleCapable[] {
         var numberOfEnemies = Random.roll(3);
+        var distance: integer = Between(this.player.body.x, this.player.body.y, START_X, START_Y);
 
-        console.log("Distance is:" + Between(this.player.body.x, this.player.body.y, START_X, START_Y));
+        console.log("Distance is:" + distance);
 
         console.log(numberOfEnemies + " Number of Enemies. Fighting:");
 
         var enemyArray = new Array();
 
+        if (distance > 1000) {
+            enemyArray.push(new GreenDragon());
+            return enemyArray;
+        }
+
         for (var i = 0; i < numberOfEnemies; i++) {
-            if (Random.roll(1000) > Between(this.player.body.x, this.player.body.y, START_X, START_Y)) {
+            if (Random.roll(1000) > distance) {
                 enemyArray.push(new Goblin());
             } else {
                 enemyArray.push(new Zombie());
@@ -164,7 +180,6 @@ export default class BootScene extends Phaser.Scene {
         console.log(enemyArray);
         return enemyArray;
     }
-
 
 }
 

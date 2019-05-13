@@ -39,9 +39,12 @@ export default class BootScene extends Phaser.Scene {
             ).length;
         const goldAmt = Random.roll(0, 10 * bodyCount) + 1 * bodyCount
         this.gameData.player.gold += goldAmt;
-        this.gameData.player.statPoints++;
         console.log("gold aquired: ", goldAmt);
-        console.log("1 stat point acquired.");
+        if (bodyCount == this.battle.stage.right.length) {
+          this.gameData.player.statPoints++;
+          console.log("1 stat point acquired.");
+        }
+
         this.switchToMainScene();
       } else {
         this.switchToGameOver();

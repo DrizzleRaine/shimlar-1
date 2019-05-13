@@ -1,6 +1,11 @@
 import * as Phaser from 'phaser'
 import {Player} from "../data/gameData";
 
+const START_X: integer = 10;
+const START_Y: integer = 10;
+const WIDTH: integer = 240 - 20;
+const HEIGHT: integer = 160 - 20;
+
 export default class BootScene extends Phaser.Scene {
 
     private statusKey: Phaser.Input.Keyboard.Key;
@@ -12,7 +17,7 @@ export default class BootScene extends Phaser.Scene {
     private playerSpeed: Phaser.GameObjects.BitmapText;
     private playerStatPoints: Phaser.GameObjects.BitmapText;
     private debugNum: integer = 10;
-    private rectangle: Phaser.GameObjects.Rectangle;
+    private screen: Phaser.GameObjects.Rectangle;
     private player: Player;
 
     constructor() {
@@ -27,14 +32,14 @@ export default class BootScene extends Phaser.Scene {
 
     create() {
 
-        this.rectangle = this.add.rectangle(25, 25, +this.game.config.width - 50, +this.game.config.height - 50, 0x000).setOrigin(0, 0);
-        this.playerName = this.add.bitmapText(30, 30, "script", this.player.name.toUpperCase());
-        this.playerHP = this.add.bitmapText(30, 40, "script", "HP:" + this.player.stats.health + "/" + this.player.stats.maxHealth).setOrigin(0, 0);
-        this.playerAttack = this.add.bitmapText(30, 50, "script", "ATK:" + this.player.stats.attack).setOrigin(0, 0);
-        this.playerDefence = this.add.bitmapText(30, 60, "script", "DEF:" + this.player.stats.defence).setOrigin(0, 0);
-        this.playerSpeed = this.add.bitmapText(30, 70, "script", "SPD:" + this.player.stats.speed).setOrigin(0, 0);
-        this.playerStatPoints = this.add.bitmapText(30, 80, "script", "STAT POINTS:" + this.player.statPoints).setOrigin(0, 0);
-        this.rectangle.setAlpha(.5);
+        this.screen = this.add.rectangle(START_X, START_Y, +WIDTH, +HEIGHT, 0x000).setOrigin(0, 0);
+        this.playerName = this.add.bitmapText(START_X + 5, START_Y + 5, "script", this.player.name.toUpperCase());
+        this.playerHP = this.add.bitmapText(START_X + 5, START_Y + 15, "script", "HP:" + this.player.stats.health + "/" + this.player.stats.maxHealth).setOrigin(0, 0);
+        this.playerAttack = this.add.bitmapText(START_X + 5, START_Y + 25, "script", "ATK:" + this.player.stats.attack).setOrigin(0, 0);
+        this.playerDefence = this.add.bitmapText(START_X + 5, START_Y + 35, "script", "DEF:" + this.player.stats.defence).setOrigin(0, 0);
+        this.playerSpeed = this.add.bitmapText(START_X + 5, START_Y + 45, "script", "SPD:" + this.player.stats.speed).setOrigin(0, 0);
+        this.playerStatPoints = this.add.bitmapText(START_X + 5, START_Y + 55, "script", "SP:" + this.player.statPoints).setOrigin(0, 0);
+        this.screen.setAlpha(.5);
         this.statusKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         console.info("A Test!");
 

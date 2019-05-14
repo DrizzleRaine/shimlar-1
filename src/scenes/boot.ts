@@ -15,6 +15,7 @@ import BattleStage from '../lib/BattleStage';
 import Random from '../util/Random';
 import BattleCapable from "../lib/BattleCapable";
 import Between = Phaser.Math.Distance.Between;
+import StaticTilemapLayer = Phaser.Tilemaps.StaticTilemapLayer;
 
 const START_X: integer = 700;
 const START_Y: integer = 700;
@@ -33,7 +34,8 @@ export default class BootScene extends Phaser.Scene {
     private gameData: GameData;
     private playerGoldText: Phaser.GameObjects.BitmapText;
     private playerDebugText: Phaser.GameObjects.BitmapText;
-    private mobs: Array<Phaser.GameObjects.Sprite> = new Array();
+    private mobs: Array<Phaser.GameObjects.GameObject> = new Array();
+    private layer: Phaser.Tilemaps.StaticTilemapLayer;
 
 
     constructor() {
@@ -73,12 +75,12 @@ export default class BootScene extends Phaser.Scene {
         // size of  the tiles.
         this.tileset = this.map.addTilesetImage('rts', 'tiles')//, 126, 126, 65, 66);
         // Render a single static texture from layer 0 aka Ground
-        let layer = this.map.createStaticLayer(0, this.tileset, 0, 0);
-        layer.setCollisionByProperty({collides: true});
+        this.layer = this.map.createStaticLayer(0, this.tileset, 0, 0);
+        this.layer.setCollisionByProperty({collides: true});
 
         this.player = this.add.circle(START_X, START_Y, 8, 0xff0000);
         this.physics.add.existing(this.player);
-        this.physics.add.collider(this.player, layer);
+        this.physics.add.collider(this.player, this.layer);
         // maybe don't use a statically defined size and dynamically figure it out
         this.player.body.collideWorldBounds = true;
         this.physics.world.setBounds(0, 0, 128 * 32, 128 * 32)
@@ -105,7 +107,9 @@ export default class BootScene extends Phaser.Scene {
         var timedEvent = this.time.addEvent({delay: 3000, callback: this.spawnMob, callbackScope: this, loop: true});
         this.spawnMob();
 
+
     }
+
 
     update() {
         // Probably shouldn't do this every frame...:P
@@ -124,13 +128,7 @@ export default class BootScene extends Phaser.Scene {
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.battleKey)) {
-            const enemies = this.createEnemyGroup();
-            const battle = new BattleStage({
-                left: [this.gameData.player],
-                right: enemies
-            });
-            this.scene.launch("battle", battle);
-            this.scene.pause();
+            this.startBattle();
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.statusKey)) {
@@ -152,8 +150,24 @@ export default class BootScene extends Phaser.Scene {
             this.player.body.setVelocityY(this.playerSpeed)
         }
 
-
         // this.player.body.velocity.normalize().scale(speed); // todo
+    }
+
+    startBattle() {
+        this.eraseMobs();
+        const enemies = this.createEnemyGroup();
+        const battle = new BattleStage({
+            left: [this.gameData.player],
+            right: enemies
+        });
+        this.scene.launch("battle", battle);
+        this.scene.pause();
+
+        this.keys.down.reset();
+        this.keys.left.reset();
+        this.keys.right.reset();
+        this.keys.up.reset();
+
     }
 
     createEnemyGroup(): BattleCapable[] {
@@ -184,16 +198,36 @@ export default class BootScene extends Phaser.Scene {
 
     // TODO: Extremely bad way to do this. Much better would be reusing the same sprites just changing the count. More research needed.
     spawnMob() {
-        this.mobs.forEach(function (element) {
-            element.destroy();
-        });
+        this.eraseMobs();
         this.mobs = new Array();
         var enemyCount: integer = Random.roll(2) + 1;
         for (var i = 0; i < enemyCount; i++) {
-            this.mobs.push(new Phaser.GameObjects.Sprite(this, this.player.body.x + Random.roll(100) - 50, this.player.body.y + Random.roll(100) - 50, "worldmapmonster"));
-            this.add.existing(this.mobs[i]);
+            this.mobs.push(this.add.sprite(this.player.body.x + Random.roll(100) - 50, this.player.body.y + Random.roll(100) - 50, "worldmapmonster"));
+            this.physics.add.existing(this.mobs[i]);
+            this.physics.add.collider(this.mobs[i], this.layer);
+            this.mobs[i].body.collideWorldBounds = true;
+            this.physics.add.collider(this.player, this.mobs[i], this.startBattle, this.test, this); // todo I have no clue how the second callback in collider matters
+            var x = Random.roll(2);
+            var y = Random.roll(2);
+            if (x == 2) {
+                x = -1
+            }
+            if (y == 2) {
+                y = -1
+            }
+            this.mobs[i].body.setVelocityX(x);
+            this.mobs[i].body.setVelocityY(y);
         }
+    }
 
+    eraseMobs() {
+        this.mobs.forEach(function (element) {
+            element.destroy();
+        });
+    }
+
+    test(): boolean {
+        return true;
     }
 
 }

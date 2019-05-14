@@ -114,7 +114,10 @@ export default class BootScene extends Phaser.Scene {
     update() {
         // Probably shouldn't do this every frame...:P
         this.playerGoldText.setText(("Gold: " + this.gameData.player.gold.toFixed(0)).toUpperCase());
-        this.playerDebugText.setText(`X:${this.player.body.x}  Y:${this.player.body.y}`);
+        this.player.body.x = parseInt(this.player.body.x); //todo this is a bandaid to prevent weird floating point during collision, investigate why
+        this.player.body.y = parseInt(this.player.body.y);
+        var distance: integer = Between(this.player.body.x, this.player.body.y, START_X, START_Y);
+        this.playerDebugText.setText(`X:${this.player.body.x}  Y:${this.player.body.y} Dist:${distance.toFixed(0)}`);
 
         if (Phaser.Input.Keyboard.JustDown(this.saveKey)) {
             const currentTimeSeconds: integer = Math.floor(Date.now() / 1000);

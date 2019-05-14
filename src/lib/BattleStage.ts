@@ -1,5 +1,7 @@
 import BattleCapable from './BattleCapable'
 
+//Todo: Remove dead enemies from the turn queue, make speed matter, including the players sword speed.
+
 export default class BattleStage {
   private current: BattleCapable;
   private queue: Array<BattleCapable> = [];

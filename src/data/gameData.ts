@@ -39,6 +39,9 @@ export class Player extends BattleCapable {
     private character: Phaser.GameObjects.Sprite;
     public statPoints: integer = 1;
 
+    public level: integer = 1;
+    public experience: integer = 0;
+
     // Blacksmithing Skill
     public blacksmithSkill: integer = 30;
     public swordAtk: integer = 1;

@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser'
 import { ShimlarKeys } from "../util/ShimlarKeys";
-import GameData from "../data/gameData";
+import GameData, {Player} from "../data/gameData";
 import BattleCapable from "../lib/BattleCapable";
 import BattleStage from '../lib/BattleStage';
 import Random from '../util/Random';
@@ -37,15 +37,19 @@ export default class BootScene extends Phaser.Scene {
             .filter(body =>
               body != this.gameData.player && body.stats.health <= 0
             ).length;
-        const goldAmt = Random.roll(0, 10 * bodyCount) + 1 * bodyCount
-        this.gameData.player.gold += goldAmt;
-        console.log("gold aquired: ", goldAmt);
-        if (bodyCount == this.battle.stage.right.length) {
-          this.gameData.player.statPoints++;
-          console.log("1 stat point acquired.");
-        }
+        const goldReward = Random.roll(0, 10 * bodyCount) + 1 * bodyCount
 
-        this.switchToMainScene();
+        if (bodyCount == this.battle.stage.right.length) {
+          var expReward: integer = 0;
+          console.log("1 stat point acquired.");
+          this.battle.stage.right.forEach(function (element) {
+            expReward += element.stats.maxHealth;
+          });
+          this.switchToVictoryScreen(goldReward, expReward, this.gameData.player);
+        } else {
+
+          this.switchToMainScene();
+        }
       } else {
         this.switchToGameOver();
       }
@@ -103,7 +107,7 @@ export default class BootScene extends Phaser.Scene {
           entity.setX(xPosition);
           entity.setY(yPosition);
           entity.setFlipX(alignLeft);
-          entity.setOrigin(alignLeft?0:1, 1)
+          entity.setOrigin(alignLeft ? 0 : 1, 1);
           this.add.existing(entity)
         }
         this.allLabels.push([
@@ -165,6 +169,11 @@ export default class BootScene extends Phaser.Scene {
 
   private switchToMainScene() {
     this.scene.resume("boot");
+    this.scene.stop();
+  }
+
+  private switchToVictoryScreen(goldReward: integer, expReward: integer, player: Player) {
+    this.scene.start("victoryscene", {goldReward: goldReward, expReward: expReward, player: player});
     this.scene.stop();
   }
 
